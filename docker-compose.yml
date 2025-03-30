@@ -1,4 +1,16 @@
 services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 12900921
+      MYSQL_DATABASE: "mysql-1"
+      MYSQL_USER: "user-mysql-1"
+      MYSQL_PASSWORD: 12900921
+      MYSQL_TCP_PORT: "3306"
+    ports:
+      - "3306:3306"
+
   user-service:
     build:
       context: ./user-service
@@ -9,6 +21,9 @@ services:
       - PORT=1111
     volumes:
       - ./user-service/src:/app/src
+    depends_on:
+      - db
+
   notification-service:
     build:
       context: ./notification-service
