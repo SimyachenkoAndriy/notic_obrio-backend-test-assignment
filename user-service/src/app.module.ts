@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { User } from './user/user.entity';
 import { UsersController } from './user/user.controller';
 import { UsersService } from './user/user.service';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
@@ -17,6 +18,15 @@ import { UsersService } from './user/user.service';
       synchronize: true,
     }),
     TypeOrmModule.forFeature([User]),
+    BullModule.forRoot({
+      redis: {
+        host: 'redis',
+        port: 6379,
+      },
+    }),
+    BullModule.registerQueue({
+      name: 'notification-queue',
+    }),
   ],
   controllers: [UsersController],
   providers: [UsersService],
