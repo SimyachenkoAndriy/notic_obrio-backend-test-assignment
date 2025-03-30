@@ -1,0 +1,21 @@
+services:
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    ports:
+      - "1111:1111"
+    environment:
+      - PORT=1111
+    volumes:
+      - ./user-service/src:/app/src
+  notification-service:
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    ports:
+      - "2222:2222"
+    volumes:
+      - ./notification-service/src:/app/src
+    depends_on:
+      - user-service
