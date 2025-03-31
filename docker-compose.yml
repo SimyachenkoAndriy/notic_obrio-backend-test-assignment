@@ -21,6 +21,8 @@ services:
     build:
       context: ./notification-service
       dockerfile: Dockerfile
+      args:
+        WEBHOOK_URL: ${WEBHOOK_URL}
     ports:
       - "2222:2222"
     volumes:
@@ -28,15 +30,19 @@ services:
     depends_on:
       - redis
       - db
+    environment:
+      - WEBHOOK_URL=${WEBHOOK_URL}
   user-service:
     container_name: user-service-container
     build:
       context: ./user-service
       dockerfile: Dockerfile
+      args:
+        - NOTIFICATION_DELAY=${NOTIFICATION_DELAY}
     ports:
       - "1111:1111"
     environment:
-      - PORT=1111
+      - NOTIFICATION_DELAY=${NOTIFICATION_DELAY}
     volumes:
       - ./user-service/src:/app/src
     depends_on:
