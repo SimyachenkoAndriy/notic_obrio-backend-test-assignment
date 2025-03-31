@@ -10,15 +10,16 @@ export class NotificationProcessor {
     const { userId, name } = job.data;
     console.log(`Sending push notification to user ${userId} (${name})`);
 
+    const webhookUrl =
+      process.env.WEBHOOK_URL ||
+      'https://webhook-test.com/31f65c9bf3cdc397178ec6fc5e6fb';
+
     try {
-      const response = await axios.post(
-        'https://webhook-test.com/31f65c9bf3cdc397178ec6fc5e6fb551',
-        {
-          userId,
-          name,
-          message: 'This is your scheduled push notification after 24 hours',
-        },
-      );
+      const response = await axios.post(webhookUrl, {
+        userId,
+        name,
+        message: 'This is your scheduled push notification',
+      });
       console.log('Push notification sent successfully:', response.data);
     } catch (error) {
       console.error('Error sending push notification:', error);

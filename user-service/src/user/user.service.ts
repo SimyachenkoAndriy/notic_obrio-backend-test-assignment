@@ -21,6 +21,8 @@ export class UsersService {
     const newUser = this.usersRepository.create({ name });
     const savedUser = await this.usersRepository.save(newUser);
 
+    const delayValue = Number(process.env.NOTIFICATION_DELAY) || 2000;
+
     await this.notificationQueue.add(
       'send-notification',
       {
@@ -28,7 +30,7 @@ export class UsersService {
         name: savedUser.name,
       },
       {
-        delay: 86400000, // 24 hours in milliseconds
+        delay: delayValue, // 24 hours by default
       },
     );
 
